@@ -1,9 +1,9 @@
 import React from 'react';
 
-class DocumentPage extends React.Component {
+class WidePage extends React.Component {
   render() {
     return {};
   }
 }
 
-export default DocumentPage;
+export default WidePage;

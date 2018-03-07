@@ -1,26 +1,26 @@
-import _ from "lodash";
-import React from "react";
-import Table from "semantic-ui-react/dist/commonjs/collections/Table/Table";
-import ControlPanel from "../../common/ControlPanel";
-import Popup from "semantic-ui-react/dist/commonjs/modules/Popup/Popup";
-import { Link } from "react-router-dom";
-import { api } from "../../common/Utilities";
-import { FlatButton, StyledTable } from "../../common";
+import _ from 'lodash';
+import React from 'react';
+import Table from 'semantic-ui-react/dist/commonjs/collections/Table/Table';
+import ControlPanel from '../../common/ControlPanel';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup/Popup';
+import { Link } from 'react-router-dom';
+import { api } from '../../common/Utilities';
+import { FlatButton, StyledTable } from '../../common';
 
 class SalesOrders extends React.Component {
   state = {
     column: null,
     data: null,
     direction: null,
-    loading: true
+    loading: true,
   };
 
   componentDidMount() {
     let config = {
-      onDownloadProgress: progressEvent => this.setState({ loading: false })
+      onDownloadProgress: progressEvent => this.setState({ loading: false }),
     };
     api
-      .get("/salesorders", config)
+      .get('/salesorders', config)
       .then(response => {
         this.setState({ data: response.data });
       })
@@ -34,7 +34,7 @@ class SalesOrders extends React.Component {
       this.setState({
         column: clickedColumn,
         data: _.sortBy(data, [clickedColumn]),
-        direction: "ascending"
+        direction: 'ascending',
       });
 
       return;
@@ -42,7 +42,7 @@ class SalesOrders extends React.Component {
 
     this.setState({
       data: data.reverse(),
-      direction: direction === "ascending" ? "descending" : "ascending"
+      direction: direction === 'ascending' ? 'descending' : 'ascending',
     });
   };
 
@@ -69,21 +69,18 @@ class SalesOrders extends React.Component {
         <StyledTable sortable celled fixed compact selectable>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell
-                sorted={column === "key" ? direction : null}
-                onClick={this.handleSort("key")}
-              >
+              <Table.HeaderCell sorted={column === 'key' ? direction : null} onClick={this.handleSort('key')}>
                 Key
               </Table.HeaderCell>
               <Table.HeaderCell
-                sorted={column === "orderDate" ? direction : null}
-                onClick={this.handleSort("orderDate")}
+                sorted={column === 'orderDate' ? direction : null}
+                onClick={this.handleSort('orderDate')}
               >
                 Order Date
               </Table.HeaderCell>
               <Table.HeaderCell
-                sorted={column === "customerName" ? direction : null}
-                onClick={this.handleSort("customerName")}
+                sorted={column === 'customerName' ? direction : null}
+                onClick={this.handleSort('customerName')}
               >
                 Customer Name
               </Table.HeaderCell>
@@ -93,11 +90,9 @@ class SalesOrders extends React.Component {
             {_.map(data, ({ id, key, orderDate, customerName }) => (
               <Table.Row key={id}>
                 <Table.Cell selectable>
-                  <Link to={"/sales/sales-orders/" + id}>{key}</Link>
+                  <Link to={'/sales/sales-orders/' + id}>{key}</Link>
                 </Table.Cell>
-                <Table.Cell>
-                  {new Date(orderDate).toLocaleDateString()}
-                </Table.Cell>
+                <Table.Cell>{new Date(orderDate).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>{customerName}</Table.Cell>
               </Table.Row>
             ))}
