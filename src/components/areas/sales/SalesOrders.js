@@ -6,6 +6,7 @@ import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup/Popup';
 import { Link } from 'react-router-dom';
 import { api } from '../../common/Utilities';
 import { FlatButton, StyledTable } from '../../common';
+import IcTable from '../../common/IcTable';
 
 class SalesOrders extends React.Component {
   state = {
@@ -98,6 +99,11 @@ class SalesOrders extends React.Component {
             ))}
           </Table.Body>
         </StyledTable>
+        <IcTable data={data}>
+          <IcTable.Header key="key">Key</IcTable.Header>
+          <IcTable.Header key="orderDate">Order Date</IcTable.Header>
+          <IcTable.Header key="customerName">Customer Name</IcTable.Header>
+        </IcTable>
       </div>
     );
   }
