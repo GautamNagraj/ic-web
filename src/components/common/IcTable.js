@@ -5,20 +5,31 @@ import { StyledTable } from '.';
 import { Link } from 'react-router-dom';
 
 const IcTableHeader = props => (
-  <Table.HeaderCell sorted={props.column === props.key ? props.direction : null} onClick={props.handleSort(props.key)}>
+  <Table.HeaderCell
+    sorted={props.column === props.field ? props.direction : null}
+    onClick={props.handleSort(props.field)}
+  >
     {props.children}
   </Table.HeaderCell>
 );
+
+const IcTableCell = props => <Table.Cell>{props.children}</Table.Cell>;
 
 class IcTable extends React.Component {
   state = {
     column: null,
     direction: null,
+    data: null,
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data === null) {
+      this.setState({ data: nextProps.data });
+    }
+  }
+
   handleSort = clickedColumn => () => {
-    const { column, direction } = this.state;
-    const { data } = this.props;
+    const { column, direction, data } = this.state;
 
     if (column !== clickedColumn) {
       this.setState({
@@ -37,8 +48,7 @@ class IcTable extends React.Component {
   };
 
   render() {
-    const { column, direction } = this.state;
-    const { data } = this.props;
+    const { column, direction, data } = this.state;
     return (
       <StyledTable sortable celled fixed compact selectable>
         <Table.Header>
@@ -46,22 +56,23 @@ class IcTable extends React.Component {
             {React.Children.map(this.props.children, child => {
               if (child.type === IcTableHeader) {
                 return (
-                  <IcTableHeader column={column} direction={direction} {...child.props} handleSort={this.handleSort} />
+                  <IcTableHeader
+                    column={column}
+                    direction={direction}
+                    {...child.props}
+                    handleSort={() => this.handleSort(child.props.field)}
+                  />
                 );
               }
             })}
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {_.map(data, ({ id, key, orderDate, customerName }) => (
-            <Table.Row key={id}>
-              <Table.Cell selectable>
-                <Link to={'/sales/sales-orders/' + id}>{key}</Link>
-              </Table.Cell>
-              <Table.Cell>{new Date(orderDate).toLocaleDateString()}</Table.Cell>
-              <Table.Cell>{customerName}</Table.Cell>
-            </Table.Row>
-          ))}
+          {React.Children.map(this.props.children, child => {
+            if (child.type !== IcTableHeader) {
+              return child;
+            }
+          })}
         </Table.Body>
       </StyledTable>
     );
@@ -69,5 +80,6 @@ class IcTable extends React.Component {
 }
 
 IcTable.Header = IcTableHeader;
+IcTable.Cell = IcTableCell;
 
 export default IcTable;

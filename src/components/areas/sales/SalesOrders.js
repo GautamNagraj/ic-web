@@ -100,9 +100,18 @@ class SalesOrders extends React.Component {
           </Table.Body>
         </StyledTable>
         <IcTable data={data}>
-          <IcTable.Header key="key">Key</IcTable.Header>
-          <IcTable.Header key="orderDate">Order Date</IcTable.Header>
-          <IcTable.Header key="customerName">Customer Name</IcTable.Header>
+          <IcTable.Header field="key">Key</IcTable.Header>
+          <IcTable.Header field="orderDate">Order Date</IcTable.Header>
+          <IcTable.Header field="customerName">Customer Name</IcTable.Header>
+          {_.map(data, ({ id, key, orderDate, customerName }) => (
+            <Table.Row key={id}>
+              <Table.Cell selectable>
+                <Link to={'/sales/sales-orders/' + id}>{key}</Link>
+              </Table.Cell>
+              <Table.Cell>{new Date(orderDate).toLocaleDateString()}</Table.Cell>
+              <Table.Cell>{customerName}</Table.Cell>
+            </Table.Row>
+          ))}
         </IcTable>
       </div>
     );
